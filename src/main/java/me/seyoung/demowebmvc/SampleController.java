@@ -44,9 +44,7 @@ public class SampleController {
 
     //params : 설정된 해당 키값을 가진 파라미터가 있는 요청만 받는다.
     //params = "name=spring" : 설정된 name 파라미터의 값이 spring인 요청만 받는다.
-    @RequestMapping(value="/hello", headers = HttpHeaders.FROM, params = "name")
+    //@RequestMapping(value="/hello", headers = HttpHeaders.FROM, params = "name=seyoung")
     @ResponseBody
     public String hello(){return "hello";}
-
-
 }
