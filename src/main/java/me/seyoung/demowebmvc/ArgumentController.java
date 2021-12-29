@@ -41,7 +41,7 @@ public class ArgumentController {
     //name = "id" : url에서 넘어오는 변수 명과 name 값이 같지 않을떄 지정하여 맞춰줄수 있다. 단) 같으면 해당 설정은 안해줘도 매핑된다.
     public Events eventsId(@PathVariable(required = false, name = "id") Integer varId) {
         Events event = new Events();
-        event.setId(id);
+        event.setId(varId);
 
 
         return event;
