@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+//th라는 문법을 http://www.thymeleaf.org에서 가져 온다.
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--
+    * Thymeleaf 문법
+    th:action = context root경로를 자동으로 구해준다. (표현식 - @{} url expression)
+                현재는 context root 자체가 그냥 root이기때문에 크게 문제는 없음.
+    th:object = controller에서 model에 담아준 객체를 받아준다.  (표현식 - ${} vriable expression})
+    th:field = th:object로 받은 객체의 필드 값을 얻을수 있다. (표현식 - *{} selection expression)
+-->
+
+<form action="#" th:action="@{/events}" method="post" th:object="${event}">
+    <input type="text" title="name" th:field="*{name}">
+    <input type="text" title="limit" th:field="*{limit}">
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>

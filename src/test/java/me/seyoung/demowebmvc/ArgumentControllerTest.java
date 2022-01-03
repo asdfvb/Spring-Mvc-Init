@@ -28,4 +28,21 @@ class ArgumentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(1));
     }
+
+    @Test
+    void eventsRequestParam() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.post("/events/1")
+                        .param("name", "seyoung"))
+                .andDo(print())
+                .andExpect(jsonPath("name").value("seyoung"));
+    }
+
+    @Test
+    void getEventsError() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/events/name/seyoung")
+                        .param("limit", "-10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("seyoung"));
+    }
 }
