@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!--th라는 문법을 http://www.thymeleaf.org에서 가져 온다.-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<a th:href="@{/events/form/name}">Create New Event</a> <!--events/form으로 이동하는 링크 -->
+<div th:unless="${#lists.isEmpty(eventList)}">  <!-- model에 담긴 eventList를 출력 -->
+  <ul th:each="event:${eventList}">
+    <p th:text="${event.name}">Event Name</p>
+  </ul>
+</div>
+</body>
+</html>

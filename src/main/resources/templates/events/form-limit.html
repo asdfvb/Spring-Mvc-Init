@@ -14,12 +14,10 @@
     th:field = th:object로 받은 객체의 필드 값을 얻을수 있다. (표현식 - *{} selection expression)
 -->
 
-<form action="#" th:action="@{/eventsName}" method="post" th:object="${event}">
+<form action="#" th:action="@{/events/form/limit}" method="post" th:object="${event}">
   <p th:if="${#fields.hasErrors('limit')}" th:errors="*{limit}"> Incorrect date</p>
-  <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> Incorrect date</p>
 
-  <input type="text" title="name" th:field="*{name}">
-  <input type="text" title="limit" th:field="*{limit}">
+  Limit : <input type="text" title="name" th:field="*{limit}">
   <input type="submit" value="Create">
 </form>
 </body>

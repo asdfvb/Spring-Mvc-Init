@@ -5,12 +5,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import java.awt.*;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
+
+/**
+ * @sessionAttributes
+ *
+ * - model.addAttribute에 키값이 설정된 ({"event", "text"}) 키값과 일치하면 자동으로 값을 세션에 등록해준다.
+ */
+
+@SessionAttributes({"event", "test"})
 @Controller
 public class ArgumentController {
 
@@ -90,7 +101,7 @@ public class ArgumentController {
     *
     * @Valid는 그룹을 지정할 방법이 없다.
     * */
-    @GetMapping("/events/name/{name}")
+    /*@GetMapping("/events/name/{name}")
     public Event getEventsError(@Validated(Events.ValidateLimit.class) @ModelAttribute Event event, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -100,5 +111,77 @@ public class ArgumentController {
         }
 
         return event;
+    }*/
+
+
+
+    /*
+    *
+    * 화면 새로고침을 할경우 form action 요청이 중복으로 발생하는 것을 방지 하기 위한 기법 (Post / Redirect / Get 패턴)
+    *
+    * 1. Post요청을 보낸다.
+    * 2. Return을 Redirect로 뷰를 호출한다.
+    * 3. Redirect한 Url을 GetMapping한다.
+    *
+    * */
+    @PostMapping("/eventsName")
+    public String createEvent(@Validated @ModelAttribute Events event, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "/events/form";
+        }
+
+        return "redirect:/events/list";
+    }
+
+    @GetMapping("/events/list")
+    public String getEvents(Model model){
+        List<Events> eventList = new ArrayList<>();
+        Events events = new Events();
+        events.setName("aaa");
+        events.setLimit(10);
+        eventList.add(events);
+        model.addAttribute("eventList" , eventList);
+        return "/events/list";
+    }
+
+
+
+    //******************* 멀티폼 데이터 입력 받기 **********************//
+    @GetMapping("/events/form/name")
+    public String eventFormName(Model model) {
+        model.addAttribute("event", new Events());
+
+        return "events/form-name";
+    }
+
+    @GetMapping("/events/form/limit")
+    public String eventFormLimit(@ModelAttribute Events events,  Model model) {
+        model.addAttribute("event", events);
+
+        return "events/form-limit";
+    }
+
+    @PostMapping("/events/form/name")
+    public String eventsFormNameSubmit(@Validated @ModelAttribute Events event, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "/events/form-name";
+        }
+
+        return "redirect:/events/form/limit";
+    }
+
+    @PostMapping("/events/form/limit")
+    public String eventsFormLimitSubmit(@Validated @ModelAttribute Events event, BindingResult bindingResult,
+                                       SessionStatus sessionStatus) {
+
+        if (bindingResult.hasErrors()) {
+            return "/events/form-limit";
+        }
+
+        //작업이 완료된 경우 세션에서 모델 객체 제거하기.
+        sessionStatus.setComplete();
+        return "redirect:/events/list";
     }
 }

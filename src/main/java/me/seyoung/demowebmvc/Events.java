@@ -13,12 +13,14 @@ public class Events {
 
     private Integer id;
     //@Validated 어노테이션에 그룹을 ValidateName.class로 지정시 체크함.
-    @NotBlank(groups = ValidateName.class)
+//    @NotBlank(groups = ValidateName.class)
+    @NotBlank
     private String name;
 
     //@Validated 어노테이션에 그룹을 ValidateLimit.class로 지정시 체크함.
     //최소값을 0으로 지정하여 요청에 의해 바인딩되는 값이 0 이상인지 체크함.
-    @Min(value = 0, groups = ValidateLimit.class)
+//    @Min(value = 0, groups = ValidateLimit.class)
+    @Min(0)
     private Integer limit;
 
     public Integer getId() {
