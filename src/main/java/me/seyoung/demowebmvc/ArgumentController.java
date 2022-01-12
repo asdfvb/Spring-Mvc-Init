@@ -7,10 +7,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.awt.*;
 import java.io.Reader;
 import java.io.Writer;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,13 +136,27 @@ public class ArgumentController {
         return "redirect:/events/list";
     }
 
+
+    /*
+     * HttpSession vs @SessionAttribute
+     * HttpSession : 객체에서 데이터를 꺼낼때 리턴값이 오브젝트
+     * @SessionAttribute : ()에 키를 정해서 원하는 데이터 형으로 바로 형변환 가능
+     *
+     * */
     @GetMapping("/events/list")
-    public String getEvents(Model model){
+    public String getEvents(Model model, @SessionAttribute("visitTime") LocalDateTime visitTime){
+
+        System.out.println(visitTime);
+
+        //RdirectAttribute.addFlashAttribute로 담긴 Object 형식의 데이터를 model에서 받아서 사용할수 있다.
+        Events newEvent = (Events) model.asMap().get("newEvent");
+
         List<Events> eventList = new ArrayList<>();
         Events events = new Events();
         events.setName("aaa");
         events.setLimit(10);
         eventList.add(events);
+        eventList.add(newEvent);
         model.addAttribute("eventList" , eventList);
         return "/events/list";
     }
@@ -172,16 +188,27 @@ public class ArgumentController {
         return "redirect:/events/form/limit";
     }
 
+
+
+    /*
+    * Redirect시에 model에 담긴 원시타입 데이터는 URL에 파라미터 값으로 같이 전송된다.
+    * 단) 특정값만 URL에 파라미터 값으로 넘기고 싶을 경우 RedirectAttributes를 사용하면된다.
+    *
+    * */
     @PostMapping("/events/form/limit")
     public String eventsFormLimitSubmit(@Validated @ModelAttribute Events event, BindingResult bindingResult,
-                                       SessionStatus sessionStatus) {
-
+                                        SessionStatus sessionStatus, Model model,
+                                        RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             return "/events/form-limit";
         }
 
         //작업이 완료된 경우 세션에서 모델 객체 제거하기.
         sessionStatus.setComplete();
+        attributes.addAttribute("name", event.getName());
+        attributes.addAttribute("limit", event.getLimit());
+        //session객체에 일회성으로 담긴다.  단) 리다이렉트된 URL(/event/list)에서 사용이 완료되면 session객체에서 자동으로 사라진다.
+        attributes.addFlashAttribute("newEvent", event);
         return "redirect:/events/list";
     }
 }

@@ -17,7 +17,7 @@
 <form action="#" th:action="@{/events/form/limit}" method="post" th:object="${event}">
   <p th:if="${#fields.hasErrors('limit')}" th:errors="*{limit}"> Incorrect date</p>
 
-  Limit : <input type="text" title="name" th:field="*{limit}">
+  Limit : <input type="text" title="limit" th:field="*{limit}">
   <input type="submit" value="Create">
 </form>
 </body>
