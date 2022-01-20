@@ -48,6 +48,15 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+
+        <!-- file 확장자를 알수 있는 api -->
+        <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>2.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
