@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/events")
 public class EventApi {
 
+    @ExceptionHandler
+    public ResponseEntity errorHandler() {
+        return ResponseEntity.badRequest().body("can't create event as ...");
+    }
+
     /*
     * RequestBody vs HttpEntity 차이점
     *
